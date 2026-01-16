@@ -13,7 +13,7 @@ const productList = [
   },
   {
     name: "SportsOn Product 2",
-    category: "Running",
+    category: "Tennis",
     price: 250000,
     imgUrl: "product2.png",
   },
@@ -25,13 +25,13 @@ const productList = [
   },
   {
     name: "SportsOn Product 4",
-    category: "Running",
+    category: "Football",
     price: 230000,
     imgUrl: "product4.png",
   },
   {
     name: "SportsOn Product 5",
-    category: "Running",
+    category: "Football",
     price: 440000,
     imgUrl: "product5.png",
   },
@@ -83,7 +83,7 @@ const ProductsSection = () => {
             <h3 className="font-medium text-lg mb-1.5 mt-4">{product.name}</h3>
             <div className="flex justify-between mb-8">
               <div className="text-gray-500">{product.category}</div>
-              <div className="font-medium text-primary ">
+              <div className="font-medium text-orange-500 ">
                 {Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR",
