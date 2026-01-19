@@ -1,93 +1,102 @@
-import Image from "next/image";
 import priceFormatter from "@/app/utils/price-formatter";
+import Image from "next/image";
 import Button from "./button";
-import { FiTrash2 ,FiArrowRight} from "react-icons/fi";
- export const CartList = [
+import { FiArrowRight, FiTrash2 } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+
+export const cartList = [
   {
     name: "SportsOn Product 1",
     category: "Running",
-    price: 50000,
-    qty: 1,
+    price: 450000,
+    qty: 2,
     imgUrl: "product1.png",
   },
   {
     name: "SportsOn Product 2",
-    category: "Tennis",
-    price: 50000,
-    qty: 1,
-    imgUrl: "product2.png",
+    category: "Running",
+    price: 250000,
+    qty: 3,
+    imgUrl: "product1.png",
   },
   {
     name: "SportsOn Product 3",
     category: "Running",
-    price: 50000,
+    price: 230000,
     qty: 1,
     imgUrl: "product3.png",
   },
+  {
+    name: "SportsOn Product 4",
+    category: "Running",
+    price: 530000,
+    qty: 1,
+    imgUrl: "product4.png",
+  },
 ];
 
-function CartPopup() {
-  const totalprice = CartList.reduce(
+const CartPopup = () => {
+  const { push } = useRouter();
+
+  const totalPrice = cartList.reduce(
     (total, item) => total + item.price * item.qty,
     0
   );
+
+  const handleCheckout = () => {
+    push("/checkout");
+  };
+
   return (
-    <>
-      <div className="absolute bg-white right-0 top-12 shadow-xl border-e-gray-200 w-90 z-10">
-        <div className="p-4 border-b border-gray-200 font-bold text-center">
-          Shopping Cart
+    <div className="absolute bg-white right-0 top-12 shadow-xl shadow-black/10 border border-gray-200 w-90 z-10">
+      <div className="p-4 border-b border-gray-200 font-bold text-center">
+        Shopping Cart
+      </div>
+      {cartList.map((item, index) => (
+        <div className="border-b border-gray-200 p-4 flex gap-3" key={index}>
+          <div className="bg-primary-light aspect-square w-16 flex justify-center items-center">
+            <Image
+              src={`/images/products/${item.imgUrl}`}
+              width={63}
+              height={63}
+              alt={item.name}
+              className="aspect-square object-contain"
+            />
+          </div>
+          <div className="self-center">
+            <div className="text-sm font-medium">{item.name}</div>
+            <div className="flex gap-3 font-medium text-xs">
+              <div>{item.qty}x</div>
+              <div className="text-primary">{priceFormatter(item.price)}</div>
+            </div>
+          </div>
+          <Button
+            size="small"
+            variant="ghost"
+            className="w-7 h-7 p-0! self-center ml-auto"
+          >
+            <FiTrash2 />
+          </Button>
         </div>
-
-        {CartList.map((item, index) => (
-          <div className="border-b border-gray-200 p-4 gap 3 flex" key={index}>
-            <div className="bg-red-50 aspect-square w-16 flex justify-center items-center">
-              <Image
-                src={`/images/products/${item.imgUrl}`}
-                width={63}
-                height={63}
-                alt={item.name}
-                className="aspect-square object-contain"
-              />
-            </div>
-
-            <div className="self-center">
-              <div className=" text-sm font-medium">{item.name}</div>
-              <div className="gap-3 flex font-medium text-xs">
-                <div>{item.qty}X</div>
-                <div className="text-orange-500">
-                  {priceFormatter(item.price)}
-                </div>
-              </div>
-            </div>
-            <Button
-              size="small"
-              variant="ghost"
-              className="w-7 h-7 p-0! self-center ml-auto"
-            >
-              <FiTrash2 />
-            </Button>
+      ))}
+      <div className="border-t border-gray-200 p-4">
+        <div className="flex justify-between font-semibold">
+          <div className="text-sm">Total</div>
+          <div className="text-primary text-xs">
+            {priceFormatter(totalPrice)}
           </div>
-        ))}
-
-        <div className="border-t border-gray-200 p-4">
-          <div className="flex justify-between font-semibold">
-            <div className="text-sm">Total</div>
-            <div className="text-orange-500 text-xs">
-              {priceFormatter(totalprice)}
-            </div>
-          </div>
-           <Button
+        </div>
+        <Button
           variant="dark"
           size="small"
-          className="w-full mt-4 bg-black"
-          
+          className="w-full mt-4"
+          onClick={handleCheckout}
         >
           Checkout Now <FiArrowRight />
         </Button>
-        </div>
       </div>
-    </>
+    </div>
   );
-}
+};
 
 export default CartPopup;

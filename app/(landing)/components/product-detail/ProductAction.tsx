@@ -6,14 +6,17 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import Button from "../ui/button";
-import { useState } from "react";
+import { useState} from "react";
+import { useRouter } from "next/navigation"; 
 
 
 
 
 function ProductAction() {
-
+   const { push } = useRouter();
     const[qty,setQty]=useState(1)
+     const checkout = () => {};
+
 
   return (
     <>
@@ -39,8 +42,9 @@ function ProductAction() {
           <FiShoppingBag size={24} />
           Add to Cart
         </Button>
-        <Button className=" w-full bg-black mr-2.5">
-          Add to Cart
+        <Button className=" w-full bg-black mr-2.5" 
+         onClick={() => push("/checkout")}>
+          Checkout Now
           <FiArrowRight size={24} />
         </Button>
       </div>
