@@ -1,94 +1,59 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Button from "../ui/button";
 import { FiPlus } from "react-icons/fi";
+import priceFormatter from "@/app/utils/price-formatter";
+import { Product } from "@/app/types";
+import { getImageUrl } from "@/app/lib/api";
+import { useCartStore } from "@/app/hooks/use-cart-store";
 
-const productList = [
-  {
-    name: "SportsOn Product 1",
-    category: "Running",
-    price: 450000,
-    imgUrl: "product1.png",
-    
-  },
-  {
-    name: "SportsOn Product 2",
-    category: "Tennis",
-    price: 250000,
-    imgUrl: "product2.png",
-  },
-  {
-    name: "SportsOn Product 3",
-    category: "Running",
-    price: 650000,
-    imgUrl: "product3.png",
-  },
-  {
-    name: "SportsOn Product 4",
-    category: "Football",
-    price: 230000,
-    imgUrl: "product4.png",
-  },
-  {
-    name: "SportsOn Product 5",
-    category: "Football",
-    price: 440000,
-    imgUrl: "product5.png",
-  },
-  {
-    name: "SportsOn Product 6",
-    category: "Running",
-    price: 650000,
-    imgUrl: "product6.png",
-  },
-  {
-    name: "SportsOn Product 7",
-    category: "Running",
-    price: 550000,
-    imgUrl: "product7.png",
-  },
-  {
-    name: "SportsOn Product 8",
-    category: "Running",
-    price: 650000,
-    imgUrl: "product8.png",
-  },
-];
+type TProductsProps = {
+  products: Product[];
+};
 
-const ProductsSection = () => {
+const ProductsSection = ({ products }: TProductsProps) => {
+  const { addItem } = useCartStore();
+
+  const handleAddtoCart = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+  };
+
   return (
-    <section id="products-section" className="container mx-auto mt-32 mb-52 ">
+    <section id="products-section" className="container mx-auto mt-32 mb-52">
       <h2 className="font-bold italic text-4xl text-center mb-11">
-        <span className="text-orange-500">OUR </span>PRODUCTS
+        <span className="text-primary">OUR </span>PRODUCTS
       </h2>
       <div className="grid grid-cols-4 gap-5">
-        {productList.map((product, index) => (
+        {products.map((product) => (
           <Link
-             href={`/product/${product.name}`}
-            key={index}
+            href={`/product/${product._id}`}
+            key={product._id}
             className="p-1.5 bg-white hover:drop-shadow-xl duration-300"
           >
-            <div className="bg-primary-light aspect-square w-full flex justify-center items-center relative bg-rose-50">
+            <div className="bg-primary-light aspect-square w-full flex justify-center items-center relative">
               <Image
-                src={`/images/products/${product.imgUrl}`}
+                src={getImageUrl(product.imageUrl)}
                 alt={product.name}
                 width={300}
                 height={300}
                 className="aspect-square object-contain"
               />
-              <Button className="w-10 h-10 p-2! absolute right-3 top-3  bg-orange-500">
+              <Button
+                className="w-10 h-10 p-2! absolute top-3 right-3 "
+                onClick={(e) => handleAddtoCart(e, product)}
+              >
                 <FiPlus size={24} />
               </Button>
             </div>
             <h3 className="font-medium text-lg mb-1.5 mt-4">{product.name}</h3>
             <div className="flex justify-between mb-8">
-              <div className="text-gray-500">{product.category}</div>
-              <div className="font-medium text-orange-500 ">
-                {Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                  maximumSignificantDigits: 3,
-                }).format(product.price)}
+              {/* <div className="text-gray-500">{product.category.name}</div> */}
+              <div className="font-medium text-primary">
+                {priceFormatter(product.price)}
               </div>
             </div>
           </Link>

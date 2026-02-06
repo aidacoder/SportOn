@@ -1,55 +1,71 @@
-"use client"
+"use client";
+
 import {
-  FiShoppingBag,
   FiArrowRight,
-  FiChevronUp,
   FiChevronDown,
+  FiChevronUp,
+  FiShoppingBag,
 } from "react-icons/fi";
 import Button from "../ui/button";
-import { useState} from "react";
-import { useRouter } from "next/navigation"; 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { Product } from "@/app/types";
 
+type TProductActionsProps = {
+  product: Product;
+  stock: number;
+};
 
+const ProductActions = ({ product, stock }: TProductActionsProps) => {
+  const { addItem } = useCartStore();
+  const { push } = useRouter();
+  const [qty, setQty] = useState(1);
 
+  const handleAddToCart = () => {
+    addItem(product, qty);
+  };
 
-function ProductAction() {
-   const { push } = useRouter();
-    const[qty,setQty]=useState(1)
-     const checkout = () => {};
-
+  const handleCheckout = () => {
+    addItem(product);
+    push("/checkout");
+  };
 
   return (
-    <>
-      <div className="text-white flex  gap-5">
-        <div className="border border-gray-500 inline-flex w-fit min-w-20.5">
-          <div className="aspect-square text-xl font-medium border-r border-gray-500 flex justify-center items-center text-black">
-            <span>{qty}</span>
-          </div>
-          <div className="flex flex-col text-black">
-            <button 
-            onClick={()=>setQty(qty+1)}
-            className="border-b border-gray-500 cursor-pointer h-1/2 aspect-square flex items-center justify-center">
-              <FiChevronUp />
-            </button>
-            <button 
-            onClick={()=>setQty(qty>1?qty-1:qty)}
-            className="cursor-pointer h-1/2 aspect-square flex items-center justify-center">
-              <FiChevronDown />
-            </button>
-          </div>
-        </div>
-        <Button className=" w-full bg-orange-500 ml-3">
-          <FiShoppingBag size={24} />
-          Add to Cart
-        </Button>
-        <Button className=" w-full bg-black mr-2.5" 
-         onClick={() => push("/checkout")}>
-          Checkout Now
-          <FiArrowRight size={24} />
-        </Button>
-      </div>
-    </>
-  );
-}
+    <div className="flex gap-5">
+      <div className="border border-gray-500 inline-flex w-fit min-w-20.5 ">
+       <div className="w-10 aspect-square text-xl font-medium border-r border-gray-500 flex justify-center items-center">
+        {qty}
+       </div>
 
-export default ProductAction;
+
+        <div className="flex flex-col">
+          <button
+            className="border-b border-gray-500 cursor-pointer h-1/2 aspect-square flex items-center justify-center"
+            onClick={() => setQty(qty < stock ? qty + 1 : qty)}
+          >
+            <FiChevronUp />
+          </button>
+          <button
+            className="cursor-pointer h-1/2 aspect-square flex items-center justify-center"
+            onClick={() => setQty(qty > 1 ? qty - 1 : qty)}
+          >
+            <FiChevronDown />
+          </button>
+        </div>
+      </div>
+
+
+      <Button className="px-20 w-full" onClick={handleAddToCart}>
+        <FiShoppingBag size={24} />
+        Add to Cart
+      </Button>
+      <Button variant="dark" className="px-20 w-full" onClick={handleCheckout}>
+        Checkout Now
+        <FiArrowRight size={24} />
+      </Button>
+    </div>
+  );
+};
+
+export default ProductActions;

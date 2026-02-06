@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { FiRefreshCw } from "react-icons/fi";
+
 
 const OrderConfirmed = () => {
   return (
-    <div className="bg-white w-160 p-16 flex flex-col justify-center items-center mx-auto">
+    <div className="bg-red-300 w-150 p-20 pb-7 flex flex-col justify-center items-center mx-auto ">
       <Image
         src="/images/icon-order-confirmed.svg"
         width={117}
