@@ -1,11 +1,11 @@
 
 
-import { LoginCredentials ,LoginRespons} from "../types";
+import { LoginCredentials ,LoginResponse} from "../types";
 import { fetchAPI } from "../lib/api";
 
 
- export const login = async (credentials:LoginCredentials,):Promise <LoginRespons> => {
-    const res = await fetchAPI <LoginRespons>("/auth/signin",{
+ export const login = async (credentials:LoginCredentials,):Promise <LoginResponse> => {
+    const res = await fetchAPI <LoginResponse>("/auth/signin",{
        method: "POST",
        headers: {
       "Content-Type": "application/json",
